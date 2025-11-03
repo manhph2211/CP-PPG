@@ -1,0 +1,48 @@
+data:
+  root:
+    train_val: "data/v2"
+  segment_length: 128
+  sampling_rate: 128
+  window: 8  
+  stride: 2 
+  batch_size: 64
+  num_workers: 4
+  film: False
+  gn_input: True
+  minmax: True
+  enrich: True
+  split: "subject" 
+  train_size: 0.6
+  fold: 0 
+
+model:
+  baseline:
+    depth: 3
+    chin: 1
+    chout: 1
+    initial_features: 32
+    kernel_size: 3
+    stride: 1
+    use_lstm: True
+    use_gated_block: True
+    use_se_block: True
+  
+  film:
+    encoder: False
+    decoder: False
+    latent: False
+
+train:
+  lr: 0.001
+  epoch_n: 300
+  clip_value: 1
+  postprocessing: False
+  adversarial: True
+  hinge: True
+  ckpt: ""
+
+metric:
+  beta: 0.01 
+  alpha: 1
+  theta: 0.01
+  enc: 1
