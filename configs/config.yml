@@ -1,7 +1,6 @@
 data:
   root:
     train_val: "data/v2"
-  segment_length: 128
   sampling_rate: 128
   window: 8  
   stride: 2 

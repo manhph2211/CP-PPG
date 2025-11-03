@@ -199,7 +199,7 @@ if __name__=="__main__":
         segments = []
         pressures = []
         for csv_file in glob.glob(os.path.join(cfgs['data']['root']['train_val'], "*.csv")):
-            seg_in, _, _ = read_processed_signal(csv_file, resample=cfgs['data']['segment_length'], smooth=cfgs['data']['smooth'])
+            seg_in, _, _ = read_processed_signal(csv_file, resample=cfgs['data']['sampling_rate'], smooth=cfgs['data']['smooth'])
             segments.extend(seg_in)
         return np.array(segments).reshape(-1,seg_in.shape[-1]), np.array(pressures).reshape(-1,seg_in.shape[-1])
 

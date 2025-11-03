@@ -9,11 +9,11 @@ warnings.simplefilter("ignore", UserWarning)
 import sys
 sys.path.append(".")
 from torch.utils.data import Dataset, DataLoader, RandomSampler
-from metrics.losses import CustomLoss
+from src.metrics.losses import CustomLoss
 from src.models.fcgan import Generator
 from src.utils.utils import *
 from src.utils.preprocess import *
-from metrics.metrics import SignalComparison
+from src.metrics.metrics import SignalComparison
 from src.dataloader.dataset import PPGDataset
 from configs.seed import *
 

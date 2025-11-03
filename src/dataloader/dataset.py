@@ -2,19 +2,10 @@ import torch
 import sys
 sys.path.append(".")
 import glob
-import os
 import numpy as np
-import random
 from torch.utils.data import Dataset, DataLoader, ConcatDataset
-from sklearn.model_selection import train_test_split
-from collections import defaultdict
-from src.utils.utils import get_config, plot_wavform, get_peaks_info, write_json, read_json, standardize
-from src.utils.preprocess import read_processed_signal, get_scaler, normalize, extract_window_segments, cycle_helper, read_indices
-from src.utils.classification import classify
-from src.utils.enrichment import PPGTransform
-import joblib
+from src.utils.utils import get_config, plot_wavform, read_json
 from configs.seed import *
-import neurokit2 as nk
 
 
 class PPGDataset(Dataset):
@@ -34,7 +25,6 @@ class PPGDataset(Dataset):
         self.mask = (self.segments[:,0,:,:] != 0).astype(float)
         self.src_segments, self.ref_segments = self.segments[:,0,:,:], self.segments[:,1,:,:]
 
-        ''' This part under consideration '''
         self.ref_files = glob.glob(f"assets/refs/*.npy")
         self.ref_batch = []
         self.look_up = {}
@@ -43,7 +33,6 @@ class PPGDataset(Dataset):
             ref_sample = np.load(ref_file).reshape(-1)
             self.ref_batch.extend(ref_sample)
             self.look_up[subject_name] = ref_sample
-        ''''''''''''''''''''''''''''''''''''''
         
     def __len__(self):
         return len(self.src_segments)
@@ -69,7 +58,7 @@ def get_loader(cfgs, version="8s", fold=None):
     print(f"**************** USING {version} DATASET ****************")
     if fold is None:
         fold = cfgs['data']['fold']
-    ################################################
+        
     augmentation = "aug" if cfgs['data']['enrich'] else "noaug"
 
     if int(fold):
@@ -83,7 +72,6 @@ def get_loader(cfgs, version="8s", fold=None):
         val_dataset = PPGDataset(cfgs, data_path=f"assets/val.json")
         test_dataset = PPGDataset(cfgs, data_path=f"assets/test.json")
 
-    ################################################
 
     train_loader = DataLoader(
         dataset = train_dataset,

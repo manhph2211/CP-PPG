@@ -19,7 +19,6 @@ class CustomLoss(nn.Module):
         self.beta = cfgs['metric']['beta']
         self.enc = cfgs['metric']['enc']
         self.alpha = cfgs['metric']['alpha']
-        self.segment_length = cfgs['data']['segment_length']
     
     def cosine_similarity(self, rec_signal, ref_signal):
         dot_product = torch.sum(rec_signal * ref_signal, dim=-1)        

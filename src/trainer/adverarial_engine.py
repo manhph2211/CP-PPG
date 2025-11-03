@@ -6,7 +6,7 @@ import warnings
 warnings.simplefilter("ignore", UserWarning)
 import sys
 sys.path.append(".")
-from metrics.losses import CustomLoss, DisLoss, GenLoss
+from src.metrics.losses import CustomLoss, DisLoss, GenLoss
 from src.dataloader.dataset import get_loader
 from src.models.cpppg import Generator, Discriminator
 from src.utils.utils import plot_result, depadding

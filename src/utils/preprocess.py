@@ -85,7 +85,7 @@ def read_processed_signal(csv_file, cfgs):
     raw_data = raw_data.reshape((-1,2))
     ppg_in, ppg_ref, pressure = raw_data[:,0], raw_data[:,1], raw_data[:,0]  #sensor_split(raw_data)
     if cfgs['data']['window'] > 1:
-        new_length = int(len(ppg_in) * cfgs['data']['segment_length']/sampling_rate)
+        new_length = int(len(ppg_in) * 128 /sampling_rate)
         ppg_in, ppg_ref, pressure = signal.resample(ppg_in, new_length), signal.resample(ppg_ref, new_length), signal.resample(pressure, new_length)
     return ppg_in, ppg_ref, pressure
 
@@ -116,7 +116,7 @@ def custom_segments(data, window, stride):
 
 def extract_window_segments(csv_file, cfgs, window_size=None):
     ppg_in, ppg_ref, _ = read_processed_signal(csv_file, cfgs)
-    sampling_rate = cfgs['data']['segment_length']
+    sampling_rate = cfgs['data']['sampling_rate']
     if window_size is None:
         window_size = cfgs['data']['window'] * sampling_rate
     stride = cfgs['data']['stride'] * sampling_rate
