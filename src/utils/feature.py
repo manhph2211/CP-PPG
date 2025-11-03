@@ -334,7 +334,7 @@ def extract_cycle_check(sig, fs, pk_th=0.6, remove_start_end = True):
     return cycles, peaks_norm, flag1, flag2, new_peaks, valleys
 
 
-def extract_feat_cycle(cycles, peaks_norm, fs):
+def extract_feat_cycle_peaks_norm(cycles, peaks_norm, fs):
     
     feats = []
     feat_name = []
@@ -361,202 +361,32 @@ def extract_feat_original(sig, fs, filtered=True, remove_start_end=True):
     return head, feat
 
 
-def width_at_per(per, cycle, peak, fs):    
-    height_to_reach = cycle[peak]*per
-    
-    i = 0 
-    while i < peak and cycle[i] < height_to_reach:
-        i+=1
-    
-    SW = peak - i
-    
-    i = peak
-    while i < len(cycle) and cycle[i] > height_to_reach:
-        i +=1
-    i -= 1
-    
-    DW = i - peak
-    
-    return SW, DW 
-    
-
-def vpg_points(vpg, peak):
-    pks = find_peaks(vpg)
-    vlys = find_peaks(-vpg)
-
-    Tsteepest = np.argmax(vpg[:peak])
-    w = Tsteepest 
-    
-    pks = pks[pks > peak]
-    vlys = vlys[vlys > peak]
-
-    if len(vlys) < 1:
-        end = int((len(vpg)-peak)*0.4)+peak
-        y = np.argmin(vpg[peak:end])+peak
-    else:
-        y = vlys[0]
-        
-    min_slope_idx = y
-    end = int((len(vpg)-min_slope_idx)*0.4)+min_slope_idx
-    TdiaRise = np.argmax(vpg[min_slope_idx:end])+min_slope_idx
-    z = TdiaRise
-    
-    return w, y, z
-   
-
-def apg_points(apg, peak, w, y, z):
-    a = b = c = d = e = 0
-    
-    pks = find_peaks(apg[:int(len(apg)*0.6)])
-    vly, _ = scipy.signal.find_peaks(-apg[:int(len(apg)*0.6)])
-    
-    if len(pks) < 1 or len(vly) < 1: 
-        return a, b, c, d, e
-    
-    a = pks[0]
-    if a > peak:
-        a = np.argmax(apg[0:peak])
-    else:
-        pks = pks[1:]
-        
-    vly = vly[vly > a]
-    if len(vly) < 1: 
-        return a, b, c, d, e
-    
-    vly = vly[vly > w]
-    if len(vly) < 1: 
-        return a, b, c, d, e
-    pks_tmp = pks[pks > y]
-    if len(pks_tmp)!=0:
-        e = pks_tmp[np.argmax(apg[pks_tmp])]
-    else:
-        e =  np.argmax(apg[y+1:])
-    pks = pks[pks < e]
-    vly = vly[vly < e]
-    
-    if len(vly[vly < peak-2]) < 1:
-        vly_b, _ = scipy.signal.find_peaks(-apg[w:peak-2])
-        vly_b+=w
-        
-        if len(vly_b) < 1:
-            b = np.argmin(apg[w:peak-2])+w
-        else:
-            b = vly_b[0]
-    else:
-        b = vly[0]
-    
-    vly_tmp, _ = scipy.signal.find_peaks(-apg[peak:e])
-    vly_tmp+=peak
-    if len(vly_tmp) < 1:
-        d = np.argmin(apg[peak:e])+peak
-    else: 
-        d = vly_tmp[np.argmin(apg[vly_tmp])]
-    pks_tmp, _ = scipy.signal.find_peaks(apg[b:d+1])
-    pks_tmp+=b
-    if len(pks_tmp) < 1:
-        c = np.argmax(apg[b:d])+b
-    else:
-        c = pks_tmp[np.argmax(apg[pks_tmp])]
-
-    return a, b, c, d, e
-
-
-def extract_apg_feat(cycle, vpg, peak, w, y, z, fs):    
-    feats = []
-    feats_header = []
-
-    apg = np.diff(vpg)
-    
+def extract_temp_feat_all(cycle, peak, fs):
+    feat = []    
     Tc = len(cycle)
-    
-    a, b, c, d, e = apg_points(apg,peak,w, y, z)
-    apg_p = [a, b, c, d, e]
-    apg_p_names = ['a', 'b', 'c', 'd', 'e']
-    
-    #apg amplitudes
-    feats += [apg[i] for i in apg_p]
-    feats_header += ['apg_'+i for i in apg_p_names]
-    
-    #ppg amplitudes
-    feats += [cycle[i+2] for i in apg_p]
-    feats_header += ['ppg_'+i for i in apg_p_names]
-    
-    #ratio amplitudes
-    feats += [apg[i]/apg[a] for i in apg_p[1:]]
-    feats_header += ['ratio_apg_'+i for i in apg_p_names[1:]]
-    
-    feats += [cycle[i+2]/cycle[a+2] for i in apg_p[1:]]
-    feats_header += ['ratio_ppg_'+i for i in apg_p_names[1:]]
-    
-    #Time apg points
-    feats += [a/fs,(b-a)/fs,(c-b)/fs,(d-c)/fs,(e-d)/fs]
-    feats_header += ['T_'+i for i in apg_p_names]
-    
-    feats += [a/Tc,(b-a)/Tc,(c-b)/Tc,(d-c)/Tc,(e-d)/Tc]
-    feats_header += ['T_'+i+'_norm' for i in apg_p_names]
-    
-    #Time apg points 2
-    feats += [(peak-a)/fs,(peak-b)/fs,(c-peak)/fs,(d-peak)/fs,(e-peak)/fs]
-    feats_header += ['T_peak_'+i for i in apg_p_names]
-    
-    feats += [(peak-a)/Tc,(peak-b)/Tc,(c-peak)/Tc,(d-peak)/Tc,(e-peak)/Tc]
-    feats_header += ['T_peak_'+i+'_norm' for i in apg_p_names]
-    
-    # Aging Index
-    feats += [(apg[b]-apg[c]-apg[d]-apg[e])/apg[a]]
-    feats_header += ['AI']
-    
-    # Others ratios (taken from the article)
-    bd = (vpg[d+1] - vpg[b+1])/(d-b)
-    bcda = (apg[b] - apg[c] - apg[d])/apg[a]
-    sdoo = np.sum(vpg[peak:d+1]*vpg[peak:d+1])/np.sum(vpg*vpg)
-    
-    feats += [bd, bcda, sdoo]
-    feats_header += ['bd', 'bcda', 'sdoo']
-    
-    return feats_header, feats
-
-
-def extract_temp_feat(cycle, peak, fs):
-    feat = []
-    
-    #Time of the cycle
-    Tc = len(cycle)
-    #Time from start to sys peak
     Ts = peak
     
-    #Time from systolic to end
     Td = len(cycle) - peak
     
     vpg = np.diff(cycle)
     w, y, z = vpg_points(vpg, peak)
     
-    
-    #Time from cycle start to first peak in VPG (steepest point)
-    #steepest point == max value between start and peak
     Tsteepest = w
     Steepest = vpg[w]
     
     TNegSteepest = y
     
-    #TdiaRise. Max positive slope after 'peak'
     TdiaRise = z
         
-    #Greatest negative steepest (slope) from peak to end. (Slope, Time)
     NegSteepest = vpg[TNegSteepest]
     
-    # Amplitude to DiaRise
     DiaRise = cycle[TdiaRise]
-    # SlopeDiaRise
     SteepDiaRise = vpg[TdiaRise]
     
-    #Time from Systolic peak to Diastolic Rise
     TSystoDiaRise = TdiaRise - Ts
     
-    #Time from Diastolic Rise to End
     TdiaToEnd = Tc - TdiaRise
     
-    #Ratio between systolic peak and diastolic rise amplitude
     Ratio = cycle[peak]/DiaRise
     
     point_feat_name = ['Tc', 'Ts', 'Td', 'Tsteepest', 'Steepest', 'TNegSteepest', 'NegSteepest', 
@@ -564,13 +394,11 @@ def extract_temp_feat(cycle, peak, fs):
     point_feat = [Tc/fs, Ts/fs, Td/fs, Tsteepest/fs, Steepest, TNegSteepest/fs, NegSteepest, 
             TdiaRise/fs, DiaRise, SteepDiaRise, TSystoDiaRise/fs, TdiaToEnd/fs, Ratio]
     
-    #norm by cycle
     point_feat_name = point_feat_name + ['Ts_norm', 'Td_norm', 'Tsteepest_norm', 'TNegSteepest_norm',
                        'TdiaRise_norm', 'TSystoDiaRise_norm', 'TdiaToEnd_norm']
     point_feat = point_feat + [Ts/Tc, Td/Tc, Tsteepest/Tc, TNegSteepest/Tc, 
             TdiaRise/Tc, TSystoDiaRise/Tc, TdiaToEnd/Tc]
     
-    #width_at_per
     width_names = []
     width_feats = []
 
@@ -590,17 +418,11 @@ def extract_temp_feat(cycle, peak, fs):
     point_feat += width_feats
     
     min_val=np.min(cycle)
-    #Area under the curve (AUC) from start of cycle to max upslope point
     S1 = np.trapz(cycle[:Tsteepest]-min_val)
-    #AUC from max upslope point to systolic peak
     S2 = np.trapz(cycle[Tsteepest:peak]-min_val)
-    #AUC from systolic peak to diastolic rise 
     S3 = np.trapz(cycle[peak:TdiaRise]-min_val)
-    #AUC from diastolic rise to end of cycle
     S4 = np.trapz(cycle[TdiaRise:]-min_val)
-    #AUC of systole area S1+S2
     AUCsys = S1+S2
-    #AUC of diastole area S3+S4
     AUCdia = S3+S4
     area_feat_name = ['S1','S2','S3','S4','AUCsys','AUCdia']
     area_feat = [S1,S2,S3,S4,AUCsys,AUCdia]
@@ -608,7 +430,6 @@ def extract_temp_feat(cycle, peak, fs):
     area_feat_name += ['S1_norm','S2_norm','S3_norm','S4_norm','AUCsys_norm','AUCdia_norm']
     area_feat += [S1/AUCsys,S2/AUCsys,S3/AUCdia,S4/AUCdia,AUCsys/(AUCsys+AUCdia),AUCdia/(AUCsys+AUCdia)]
     
-    # SQI feats
     SQI_skew = skew(cycle,0.3)
     SQI_kurtosis = kurtosis(cycle)
     sqi_feat_name = ['SQI_skew','SQI_kurtosis']
@@ -663,8 +484,8 @@ def extract_cycles_all_ppgs(waveforms, ppg_peaks, hr_offset, match_position, rem
     }
 
     if remove_first:
-        ppg_peaks = ppg_peaks[1:-1] ## Original
-    else: ## Addition for small waveforms
+        ppg_peaks = ppg_peaks[1:-1]
+    else:
         if ppg_peaks[0] == 0:
             ppg_peaks = ppg_peaks[1:]
         if ppg_peaks[-1] == len(waveforms['ppg'])-1:
@@ -679,7 +500,6 @@ def extract_cycles_all_ppgs(waveforms, ppg_peaks, hr_offset, match_position, rem
         start = np.round(p - lower_offset).astype("int")
         end = np.round(p + upper_offset).astype("int")
 
-        # Align two diastolic notches of cycles
         if match_position == "dia_notches":
             tolerance = 0.1
 

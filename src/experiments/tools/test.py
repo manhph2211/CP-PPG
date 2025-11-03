@@ -110,7 +110,7 @@ class Inference:
     
 if __name__ == "__main__":
     cfgs = get_config()
-    test_dataset = PPGDataset(cfgs, data_path="")
+    test_dataset = PPGDataset(cfgs, data_path="assets/test.json")
 
     test_loader = DataLoader(
         dataset = test_dataset,
@@ -120,3 +120,5 @@ if __name__ == "__main__":
     
     infer_tool = Inference(cfgs)
     rec, raw = infer_tool.infer_loader(test_loader)
+    print(rec)
+    print(raw)
