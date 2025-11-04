@@ -3,7 +3,7 @@ data:
     train_val: "data/v2"
   sampling_rate: 128
   window: 8  
-  stride: 2 
+  stride: 1.6
   batch_size: 64
   num_workers: 4
   film: False
@@ -41,7 +41,7 @@ train:
   ckpt: ""
 
 metric:
-  beta: 0.01 
+  beta: 0.01
   alpha: 1
   theta: 0.01
   enc: 1

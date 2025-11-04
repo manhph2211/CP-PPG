@@ -58,7 +58,7 @@ class AdversarialTrainer:
         train_cosin_loss_epoch = 0
         train_peak_to_peak_loss = 0
         train_mse_loss = 0
-        theta = 0.01
+        theta = self.cfgs['metric']['theta']
 
         for src_signal, ref_signal, seg_film, mask in tqdm(self.train_loader):
             
