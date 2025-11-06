@@ -18,7 +18,6 @@ class CustomLoss(nn.Module):
         self.cfgs = cfgs
         self.beta = cfgs['metric']['beta']
         self.enc = cfgs['metric']['enc']
-        self.alpha = cfgs['metric']['alpha']
     
     def cosine_similarity(self, rec_signal, ref_signal):
         dot_product = torch.sum(rec_signal * ref_signal, dim=-1)        
@@ -45,10 +44,9 @@ class CustomLoss(nn.Module):
             ref_signal = reference[i].cpu().detach().numpy().reshape(-1)
             in_peaks, _ = find_peaks(in_signal, distance=20)    
             ref_peaks, _ = find_peaks(ref_signal, distance=20)  
-            # self.alpha = self.alpha # * (abs(len(in_peaks) - len(ref_peaks)))/len(ref_peaks))
+            self.alpha = (abs(len(in_peaks) - len(ref_peaks)))/len(ref_peaks)
             mse = nn.MSELoss()(reconstructed[i], reference[i])
             l1 = self.peak_to_peak_error(in_signal, ref_signal) 
-            # l2 = self.peak_index_error(in_signal, ref_signal)
             if len(in_peaks) != len(ref_peaks):
                 custom_loss += mse * self.alpha
             else:
