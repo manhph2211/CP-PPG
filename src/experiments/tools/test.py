@@ -84,23 +84,11 @@ class Inference:
                 ref_signal = ref_signal.to(self.device)
                 mask = mask.to(self.device)
                 output_batch_tensor = self.model(src_signal, src_pressure, mask)  
-                if self.cfgs['train']['postprocessing']:
-                    output_batch_tensor = moving_average_batch(output_batch_tensor)
-                    # output_batch_tensor = output_batch_tensor.to(self.device)
-
+                
                 init_result.append(self.get_quantitative_results.compare(src_signal, ref_signal))
-
                 final_result.append(self.get_quantitative_results.compare(output_batch_tensor.to("cuda"), ref_signal))
-
                 output_batches.append(output_batch_tensor.cpu().detach().numpy())
-                
-                # for idx in range(src_signal.shape[0]):
-                #     output_batch_tensor_ = output_batch_tensor[idx].reshape(-1)
-                #     ref_signal_ = ref_signal[idx].reshape(-1)
-                #     src_signal_ = src_signal[idx].reshape(-1)
-                    
-                #     plot_result(src_signal_, output_batch_tensor_, ref_signal_, ppg_label="Result")
-                
+
         print("DONE INFERRING!")
 
         return np.mean(np.array(final_result), axis=0), np.mean(np.array(init_result), axis=0)
@@ -108,7 +96,7 @@ class Inference:
     
 if __name__ == "__main__":
     cfgs = get_config()
-    test_dataset = PPGDataset(cfgs, data_path="")
+    test_dataset = PPGDataset(cfgs, data_path="assets/test.json")
 
     test_loader = DataLoader(
         dataset = test_dataset,

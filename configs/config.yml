@@ -38,10 +38,10 @@ train:
   postprocessing: False
   adversarial: True
   hinge: True
-  ckpt: ""
+  ckpt: "checkpoints/beta0005-theta0005.pth"
 
 metric:
-  beta: 0.01
+  beta: 0.005
   alpha: 1
-  theta: 0.01
+  theta: 0.005
   enc: 1
