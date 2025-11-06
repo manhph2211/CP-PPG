@@ -3,7 +3,7 @@ data:
     train_val: "data/v2"
   sampling_rate: 128
   window: 8  
-  stride: 1.6
+  stride: 2 
   batch_size: 64
   num_workers: 4
   film: False

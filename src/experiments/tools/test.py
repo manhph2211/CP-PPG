@@ -67,8 +67,6 @@ class Inference:
                 seg_film = torch.FloatTensor(batch_in) 
 
                 output_batch_tensor = self.model(batch_in.to(self.device), seg_film.to(self.device))  
-                if not self.cfgs['train']['postprocessing']:
-                    output_batch_tensor = moving_average_batch(output_batch_tensor)
                 output_batches.append(output_batch_tensor.cpu().detach().numpy())
 
         clean_output = np.vstack(output_batches)
@@ -110,7 +108,7 @@ class Inference:
     
 if __name__ == "__main__":
     cfgs = get_config()
-    test_dataset = PPGDataset(cfgs, data_path="assets/test.json")
+    test_dataset = PPGDataset(cfgs, data_path="")
 
     test_loader = DataLoader(
         dataset = test_dataset,
