@@ -104,9 +104,14 @@ if __name__ == "__main__":
         dataset = test_dataset,
         batch_size = cfgs['data']['batch_size'],
         num_workers = cfgs['data']['num_workers'],
-    )  
+    ) 
     
-    infer_tool = Inference(cfgs)
+    infer_tool = Inference(cfgs, checkpoint="")
     rec, raw = infer_tool.infer_loader(test_loader)
-    print(rec)
-    print(raw)
+    metrics = ["MAE", "DTW", "PCC", "SP", "SW", "DW", "SA", "DA", "Skewness"]
+
+    print("{:<10} {:>12} {:>12}".format("Metric", "rec", "raw"))
+    print("-" * 36)
+
+    for name, r, w in zip(metrics, rec, raw):
+        print("{:<10} {:>12.4f} {:>12.4f}".format(name, r, w))

@@ -1,12 +1,10 @@
 import numpy as np
 import torch
 from scipy.stats import skew, kurtosis
-from src.utils.preprocess import get_peaks_info_of_segments, cycle_helper, get_feet
+from src.utils.preprocess import get_peaks_info_of_segments, cycle_helper
 from src.utils.feature import extract_feat_cycle
-from fastdtw import fastdtw
-from scipy.spatial.distance import euclidean
 from scipy.stats import pearsonr
-from tslearn.metrics import dtw, dtw_path
+from tslearn.metrics import dtw 
 
 
 class SignalComparison:
@@ -23,7 +21,6 @@ class SignalComparison:
     def dtw_similarity(self, original, reference):
         similarities = []
         batch_size = original.shape[0]
-        
         for i in range(batch_size):
             distance = dtw(original[i], reference[i])
             similarities.append(distance)
@@ -91,8 +88,6 @@ class SignalComparison:
         dia_err = np.array([0.0] * 5)
         sqi_err = np.array([0.0] * 2)
         
-        contain_dia = 0
-
         valid_src_dia = 0
         valid_ref_dia = 0
 
@@ -150,15 +145,10 @@ class SignalComparison:
         
     def compare(self, original, reference):
         batch_size = original.shape[0]
-        mse = torch.nn.MSELoss()(original, reference).detach().cpu().numpy()
         mae = torch.nn.L1Loss()(original, reference).detach().cpu().numpy()
-        
         original = original.cpu().detach().numpy().reshape(batch_size, -1)
         reference = reference.cpu().detach().numpy().reshape(batch_size, -1)
-        
         dtw = self.dtw_similarity(original, reference)
         pcc = self.pearson_cc(original, reference)
-        
-        sys_errs, area_errors, sqi_errs, width_at_per_errs, dia_errs, valid_src_percentage, valid_ref_percentage = self.feat_errors(original, reference)
-        return mae, mse, dtw, dtw/8, pcc, sys_errs[0], sys_errs[1], sys_errs[2], dia_errs[0], dia_errs[1], dia_errs[2], dia_errs[3], dia_errs[4], valid_src_percentage, area_errors[0], area_errors[1], sqi_errs[0], sqi_errs[1], width_at_per_errs[0], width_at_per_errs[1], width_at_per_errs[2], width_at_per_errs[3], width_at_per_errs[4], width_at_per_errs[5]
-    
+        sys_errs, area_errors, sqi_errs, width_at_per_errs, dia_errs, _, _ = self.feat_errors(original, reference)
+        return mae, dtw, pcc, sys_errs[0], sys_errs[1], sys_errs[2], area_errors[0], area_errors[1], sqi_errs[0]
