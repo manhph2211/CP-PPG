@@ -23,6 +23,7 @@ class Inference:
         self.cfgs = cfgs
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.model = Generator(get_config()).to(self.device)
+        print(self.model)
         self.criterion = CustomLoss(get_config()).to(self.device)
         self.model.eval()
         self.get_quantitative_results = SignalComparison(cfgs)
@@ -45,6 +46,7 @@ class Inference:
     def load_weights(self):
         try:
             print(f"USING {self.device} ... ")
+            print(f"LOADING CHECKPOINTS FROM {self.ckpt} ... ")
             self.model.load_state_dict(torch.load(self.ckpt, map_location=self.device))
             print(f"SUCCESSFULLY LOAD TRAINED MODELS: {self.ckpt} !")
         except:
@@ -86,7 +88,7 @@ class Inference:
                 output_batch_tensor = self.model(src_signal, src_pressure, mask)  
                 
                 init_result.append(self.get_quantitative_results.compare(src_signal, ref_signal))
-                final_result.append(self.get_quantitative_results.compare(output_batch_tensor.to("cuda"), ref_signal))
+                final_result.append(self.get_quantitative_results.compare(output_batch_tensor.to(self.device), ref_signal))
                 output_batches.append(output_batch_tensor.cpu().detach().numpy())
 
         print("DONE INFERRING!")
