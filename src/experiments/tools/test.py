@@ -10,7 +10,7 @@ import sys
 sys.path.append(".")
 from torch.utils.data import Dataset, DataLoader, RandomSampler
 from src.metrics.losses import CustomLoss
-from src.models.fcgan import Generator
+from src.models.cpppg import Generator
 from src.utils.utils import *
 from src.utils.preprocess import *
 from src.metrics.metrics import SignalComparison
