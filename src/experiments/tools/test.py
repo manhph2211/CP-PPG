@@ -15,7 +15,7 @@ from src.utils.utils import *
 from src.utils.preprocess import *
 from src.metrics.metrics import SignalComparison
 from src.dataloader.dataset import PPGDataset
-from configs.seed import *
+from configs.seed import * 
 
 
 class Inference:
