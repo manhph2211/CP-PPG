@@ -1,4 +1,4 @@
-Reliable Wrist-Based PPG Monitoring by Mitigating Poor Skin-Sensor Contact
+Reliable Wrist PPG Monitoring by Mitigating Poor Skin Sensor Contact
 =====
 
 <a href="#">Hung Manh Pham</a><sup>1</sup>,
