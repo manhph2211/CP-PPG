@@ -3,16 +3,15 @@ Reliable Wrist PPG Monitoring by Mitigating Poor Skin Sensor Contact
 
 <a href="#">Hung Manh Pham</a><sup>1</sup>,
 <a href="#">Matthew Yiwen Ho</a><sup>1</sup>,
-<a href="#">Yiming Zhang</a><sup>2</sup>,
-<a href="https://www.cl.cam.ac.uk/~ds806/">Dimitris Spathis</a><sup>3,4</sup>,
-<a href="https://aqibsaeed.github.io/">Aaqib Saeed</a><sup>5</sup>,
-<a href="https://www.dongma.info/">Dong Ma</a><sup>*1</sup>
+<a href="#">Yiming Zhang</a><sup>1</sup>,
+<a href="https://www.cl.cam.ac.uk/~ds806/">Dimitris Spathis</a><sup>2,3</sup>,
+<a href="https://aqibsaeed.github.io/">Aaqib Saeed</a><sup>4</sup>,
+<a href="https://www.dongma.info/">Dong Ma</a><sup>1,2*</sup>
 
 <sup>1</sup>School of Computing and Information Systems, Singapore Management University, Singapore  
-<sup>2</sup>Department of Electronic Engineering, The Chinese University of Hong Kong, China  
-<sup>3</sup>Department of Computer Science and Technology, University of Cambridge, UK  
-<sup>4</sup>Google, UK  
-<sup>5</sup>Department of Industrial Design, Eindhoven University of Technology, The Netherlands  
+<sup>2</sup>Department of Computer Science and Technology, University of Cambridge, UK  
+<sup>3</sup>Google, UK  
+<sup>4</sup>Department of Industrial Design, Eindhoven University of Technology, The Netherlands  
 <br>
 
 [![Paper](https://img.shields.io/badge/Paper-Visit%20Here-b31b1b.svg)]()
