@@ -14,7 +14,7 @@ Reliable Wrist PPG Monitoring by Mitigating Poor Skin Sensor Contact
 <sup>4</sup>Department of Industrial Design, Eindhoven University of Technology, The Netherlands  
 <br>
 
-[![Paper](https://img.shields.io/badge/Paper-Visit%20Here-b31b1b.svg)]()
+[![Paper](https://img.shields.io/badge/Paper-Visit%20Here-b31b1b.svg)](https://www.nature.com/articles/s41598-025-31883-5)
 [![Website](https://img.shields.io/badge/Website-Visit%20Here-006c66)]()
 
 # Introduction
