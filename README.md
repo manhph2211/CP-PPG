@@ -78,7 +78,6 @@ We use the **WF-PPG** dataset introduced in [WF-PPG](https://www.nature.com/arti
   "<subject_id>.csv": {
     "in_windows":  [[float, ...], ...],
     "ref_windows": [[float, ...], ...],
-    "ref_indices": [[int, ...], ...]
   },
   ...
 }
