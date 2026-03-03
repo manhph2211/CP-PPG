@@ -69,6 +69,21 @@ conda activate ppg
 pip install -r requirements.txt
 ```
 
+# Data Preparation
+
+We use the **WF-PPG** dataset introduced in [WF-PPG](https://www.nature.com/articles/s41597-025-04453-7). This contains simultaneous recordings of distorted (input) and ideal (reference) wrist PPG signals across multiple subjects under varying skin-sensor contact pressures. Download and place the preprocessed data in json format under `data/`.
+
+```json
+{
+  "<subject_id>.csv": {
+    "in_windows":  [[float, ...], ...],
+    "ref_windows": [[float, ...], ...],
+    "ref_indices": [[int, ...], ...]
+  },
+  ...
+}
+```
+
 # Training
 
 ### Experiment Tracking (Optional)
