@@ -37,7 +37,7 @@ class DataHandler:
         self.data_snapshot = None
         
     def custom_data_hanlder(self, version="8s"):
-        data = read_json(os.path.join("assets/presmooth/", f"Max1Not2L_{version}_75overlap_NOECG.json"))      
+        data = read_json(os.path.join("data/", f"{version}.json"))    ## PATH TO THE DATA (Json Formatted)
 
         custom_data = defaultdict(list)
 
@@ -47,7 +47,6 @@ class DataHandler:
                 continue # very few in WF-PPG
             in_windows = value["in_windows"]
             ref_windows = value["ref_windows"]
-            ref_indices = value["ref_indices"]
 
             in_windows = np.array(in_windows)
             ref_windows = np.array(ref_windows)
