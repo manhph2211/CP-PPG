@@ -97,7 +97,7 @@ CP-PPG uses [Comet ML](https://www.comet.com/) for experiment tracking. To enabl
 python src/experiments/tools/train.py
 ```
 
-Training supports two modes controlled by `configs/config.yml`:
+Note that the training supports different settings controlled by `configs/config.yml`. Subsequently, a pre-trained CP-PPG checkpoint can be found [here](https://drive.google.com/drive/folders/1YQIpMCSENiac1qbvy0bjqyjgU40JwTFz?usp=sharing).
 
 # Testing
 
