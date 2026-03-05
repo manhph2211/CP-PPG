@@ -147,6 +147,17 @@ For a step-by-step walkthrough covering data exploration, augmentation, model de
   publisher={Nature Publishing Group UK London}
 }
 
+@article{ho2025wf,
+  title={WF-PPG: A wrist-finger dual-channel dataset for studying the impact of contact pressure on PPG morphology},
+  author={Ho, Matthew Yiwen and Pham, Hung Manh and Saeed, Aaqib and Ma, Dong},
+  journal={Scientific Data},
+  volume={12},
+  number={1},
+  pages={200},
+  year={2025},
+  publisher={Nature Publishing Group UK London}
+}
+
 ```
 
 # Acknowledgements
