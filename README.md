@@ -15,7 +15,7 @@ Reliable Wrist PPG Monitoring by Mitigating Poor Skin Sensor Contact
 <br>
 
 [![Paper](https://img.shields.io/badge/Paper-Visit%20Here-b31b1b.svg)](https://www.nature.com/articles/s41598-025-31883-5)
-[![Checkpoint](https://img.shields.io/badge/Website-Visit%20Here-006c66)](https://huggingface.co/Manhph2211/CP-PPG)
+[![Checkpoint](https://img.shields.io/badge/Checkpoint-Visit%20Here-006c66)](https://huggingface.co/Manhph2211/CP-PPG)
 
 # Introduction
 
